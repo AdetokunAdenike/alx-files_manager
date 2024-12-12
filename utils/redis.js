@@ -21,7 +21,15 @@ class RedisClient {
    * @return true if connection alive or false if not
    */
   isAlive() {
-    return this.client.connected;
+    return new Promise((resolve) => {
+      this.client.ping((err, response) => {
+        if (err || response !== 'PONG') {
+          resolve(false);
+        } else {
+          resolve(true);
+        }
+      });
+    });
   }
 
   /**
