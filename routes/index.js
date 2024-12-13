@@ -15,6 +15,9 @@ router.get('/users/me', UsersController.getMe);
 router.get('/files/:id', FilesController.getShow);
 router.get('/files', FilesController.getIndex);
 
+// the new route for fetching file data
+router.get('/files/:id/data', FilesController.getFile);  // NEW ROUTE
+
 // the post Routes
 router.post('/users', UsersController.postNew);
 router.post('/files', FilesController.postUpload);
