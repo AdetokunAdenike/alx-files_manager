@@ -1,5 +1,5 @@
+const bcrypt = require('bcrypt');
 const uuidv4 = require('uuid').v4;
-const sha1 = require('sha1');
 const redisClient = require('../utils/redis');
 const dbClient = require('../utils/db');
 
@@ -17,13 +17,13 @@ class AuthController {
 
     if (!email || !password) return response.status(401).send({ error: 'Unauthorized' });
 
-    const sha1Password = sha1(password);
-
     try {
-      const finishedCreds = { email, password: sha1Password };
-      const user = await dbClient.users.findOne(finishedCreds);
+      const user = await dbClient.users.findOne({ email });
 
-      if (!user) return response.status(401).send({ error: 'Unauthorized' });
+      if (!user) return response.status(401).send({ error: 'Invalid email or password' });
+
+      const match = await bcrypt.compare(password, user.password);
+      if (!match) return response.status(401).send({ error: 'Invalid email or password' });
 
       const token = uuidv4();
       const key = `auth_${token}`;
@@ -47,7 +47,7 @@ class AuthController {
 
     try {
       const user = await redisClient.get(`auth_${token}`);
-      if (!user) return response.status(401).send({ error: 'Unauthorized' });
+      if (!user) return response.status(401).send({ error: 'Invalid token' });
 
       await redisClient.del(`auth_${token}`);
       return response.status(204).end();
