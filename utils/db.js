@@ -14,7 +14,6 @@ class DBClient {
     this.users = null;
     this.files = null;
 
-    // Connect to the database asynchronously
     this.connect();
   }
 
@@ -50,7 +49,7 @@ class DBClient {
     if (!this.db) {
       throw new Error('Database is not connected');
     }
-    return this.users.countDocuments(); // No need to `await` here
+    return this.users.countDocuments();
   }
 
   /**
@@ -61,7 +60,7 @@ class DBClient {
     if (!this.db) {
       throw new Error('Database is not connected');
     }
-    return this.files.countDocuments(); // No need to `await` here
+    return this.files.countDocuments();
   }
 
   /**
@@ -73,7 +72,19 @@ class DBClient {
     if (!this.db) {
       throw new Error('Database is not connected');
     }
-    return this.users.findOne(query); // No need to `await` here
+    return this.users.findOne(query);
+  }
+
+  /**
+   * Insert a new user document into the users collection.
+   * @param {Object} user - The user document to insert
+   * @return {Promise<Object>} - The result of the insert operation
+   */
+  async insertUser(user) {
+    if (!this.db) {
+      throw new Error('Database is not connected');
+    }
+    return await this.users.insertOne(user);
   }
 }
 
