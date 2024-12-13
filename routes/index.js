@@ -6,7 +6,6 @@ import FilesController from '../controllers/FilesController';
 
 const router = express.Router();
 
-// the get Routes
 router.get('/status', AppController.getStatus);
 router.get('/stats', AppController.getStats);
 router.get('/connect', AuthController.getConnect);
@@ -15,12 +14,9 @@ router.get('/users/me', UsersController.getMe);
 router.get('/files/:id', FilesController.getShow);
 router.get('/files', FilesController.getIndex);
 
-// the new route for fetching file data
-router.get('/files/:id/data', FilesController.getFile);  // NEW ROUTE
+router.get('/files/:id/data', FilesController.getFile);
 
-// the post Routes
 router.post('/users', UsersController.postNew);
 router.post('/files', FilesController.postUpload);
 
-// Use ES module export
 export default router;
