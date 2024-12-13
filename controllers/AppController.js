@@ -8,14 +8,24 @@ class AppController {
    */
   static async getStatus(request, response) {
     try {
-      // Checking if Redis and DB are alive and returning status
+      const redisAlive = await redisClient.isAlive();
+      const dbAlive = await dbClient.isAlive();
+
+      if (!redisAlive) {
+        console.error('Redis server is down');
+      }
+      if (!dbAlive) {
+        console.error('MongoDB server is down');
+      }
+
       const status = {
-        redis: await redisClient.isAlive(),
-        db: await dbClient.isAlive(),
+        redis: redisAlive,
+        db: dbAlive,
       };
+
       response.status(200).json(status);
     } catch (error) {
-      console.error('Error checking status:', error.message);
+      console.error('Error checking system status:', error.message);
       response.status(500).json({ error: 'Unable to check system status' });
     }
   }
@@ -26,13 +36,17 @@ class AppController {
    */
   static async getStats(request, response) {
     try {
+      const usersCount = await dbClient.nbUsers();
+      const filesCount = await dbClient.nbFiles();
+
       const stats = {
-        users: await dbClient.nbUsers(),
-        files: await dbClient.nbFiles(),
+        users: usersCount,
+        files: filesCount,
       };
+
       response.status(200).json(stats);
     } catch (error) {
-      console.error('Error fetching stats:', error.message);
+      console.error('Error fetching system stats:', error.message);
       response.status(500).json({ error: 'Unable to fetch system stats' });
     }
   }
