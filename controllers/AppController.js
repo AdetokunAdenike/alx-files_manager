@@ -8,13 +8,15 @@ class AppController {
    */
   static async getStatus(request, response) {
     try {
+      // Checking if Redis and DB are alive and returning status
       const status = {
         redis: await redisClient.isAlive(),
         db: await dbClient.isAlive(),
       };
       response.status(200).json(status);
     } catch (error) {
-      response.status(500).json({ error: error.message });
+      console.error('Error checking status:', error.message);
+      response.status(500).json({ error: 'Unable to check system status' });
     }
   }
 
@@ -30,7 +32,8 @@ class AppController {
       };
       response.status(200).json(stats);
     } catch (error) {
-      response.status(500).json({ error: error.message });
+      console.error('Error fetching stats:', error.message);
+      response.status(500).json({ error: 'Unable to fetch system stats' });
     }
   }
 }
