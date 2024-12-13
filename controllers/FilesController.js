@@ -157,4 +157,4 @@ class FilesController {
   }
 }
 
-module.exports = FilesController;
+module.exports = { FilesController };

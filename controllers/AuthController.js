@@ -1,7 +1,7 @@
-import { v4 as uuidv4 } from 'uuid';
-import sha1 from 'sha1';
-import redisClient from '../utils/redis';
-import dbClient from '../utils/db';
+const uuidv4 = require('uuid').v4;
+const sha1 = require('sha1');
+const redisClient = require('../utils/redis');
+const dbClient = require('../utils/db');
 
 class AuthController {
   /**
@@ -18,7 +18,7 @@ class AuthController {
 
     const sha1Password = sha1(password);
 
-    // Find the user associate to this email and with this password
+    // Find the user associated with this email and password
     const finishedCreds = { email, password: sha1Password };
     const user = await dbClient.users.findOne(finishedCreds);
     // If no user has been found
@@ -39,12 +39,12 @@ class AuthController {
    * Should sign-out the user based on the token
    */
   static async getDisconnect(request, response) {
-    // retrieve the user from the token
+    // Retrieve the user from the token
     const token = request.headers['x-token'];
     const user = await redisClient.get(`auth_${token}`);
     if (!user) return response.status(401).send({ error: 'Unauthorized' });
 
-    // delete the token in Redis
+    // Delete the token in Redis
     await redisClient.del(`auth_${token}`);
     return response.status(204).end();
   }

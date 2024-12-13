@@ -19,4 +19,5 @@ router.get('/files', FilesController.getIndex);
 router.post('/users', UsersController.postNew);
 router.post('/files', FilesController.postUpload);
 
-module.exports = router;
+// Use ES module export
+export default router;
