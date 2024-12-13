@@ -5,10 +5,10 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start-server": "nodemon --exec babel-node --presets @babel/preset-env ./server.js",
-    "start-worker": "nodemon --exec babel-node --presets @babel/preset-env ./worker.js",
-    "dev": "nodemon --exec babel-node --presets @babel/preset-env",
-    "test": "./node_modules/.bin/mocha --require @babel/register --exit"
+    "start-server": "nodemon ./server.js",
+    "start-worker": "nodemon ./worker.js",
+    "dev": "nodemon",
+    "test": "mocha --require @babel/register --exit"
   },
   "dependencies": {
     "bull": "^3.16.0",
@@ -19,7 +19,6 @@
     "mongodb": "^3.5.9",
     "redis": "^4.7.0",
     "sha1": "^1.1.1",
-    "simple-update-notifier": "^2.0.0",
     "uuid": "^8.2.0"
   },
   "devDependencies": {
@@ -28,9 +27,6 @@
     "@babel/node": "^7.8.0",
     "@babel/preset-env": "^7.8.2",
     "@babel/register": "^7.8.0",
-    "@types/bull": "^3.15.9",
-    "@types/mongodb": "^4.0.6",
-    "@types/uuid": "^10.0.0",
     "chai": "^4.5.0",
     "eslint": "^8.57.0",
     "eslint-config-airbnb-base": "^15.0.0",
